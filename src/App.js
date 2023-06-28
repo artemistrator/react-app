@@ -51,11 +51,11 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleCityClick = async (cityName) => {
-    console.log("Clicked city:", cityName);
+  const handleCityClick = async (city) => {
+    console.log("Clicked city:", city);
     try {
-      await setCityName(cityName);
-      const weatherData = await fetchDataWeather(cityName);
+      await setCityName(city);
+      const weatherData = await fetchDataWeather(city);
       setWeatherData(weatherData);
       setSelectedCityWeather(weatherData);
     } catch (error) {
@@ -63,10 +63,10 @@ const App = () => {
     }
   };
 
-  const handleAddWeather = async (cityName, weatherData) => {
+  const handleAddWeather = async (city, weatherData) => {
     try {
-      await setCityName(cityName);
-      console.log("Selected city:", cityName);
+      await setCityName(city);
+      console.log("Selected city:", city);
       console.log("Fetched weather data:", weatherData);
       setWeatherData(weatherData);
       setSelectedCityWeather(weatherData);
@@ -75,9 +75,9 @@ const App = () => {
     }
   };
 
-  const handleSelectCity = (cityName) => {
-    setCityName(cityName);
-    console.log("Selected city:", cityName);
+  const handleSelectCity = (city) => {
+    setCityName(city);
+    console.log("Selected city:", city);
   };
   console.log("weatherData",weatherData);
   return (
