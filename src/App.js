@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { fetchDataWeather, fetchCitySuggestions, useCityName } from "./API/api";
-
 import WeatherCard from "./UI/WeatherCard";
 import WeatherForecast from "./UI/WeatherForecast";
 import Auth from "./UI/Auth";
 import { auth } from "./firebase/firebase";
 import CitySearch from "./UI/CitySearch";
 import FavoriteCities from "./UI/FavoriteCities";
-
+import "./UI/FavoriteCities.css";
+import { ReactComponent as MoonIcon } from './img/moon.svg';
 const App = () => {
-  const [selectedCity, setSelectedCity] = useCityName();
   const [user, setUser] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
+  const [favoriteCity, setFavoriteCity] = useState(null);
+  const [cityName, setCityName] =  useState("Москва");
+  const [selectedCityWeather, setSelectedCityWeather] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   useEffect(() => {
     const fetchWeatherData = async (city) => {
@@ -23,9 +30,10 @@ const App = () => {
         console.error("Ошибка при получении данных о погоде:", error);
       }
     };
-    console.log("Selected city:", selectedCity);
-    fetchWeatherData(selectedCity);
-  }, [selectedCity]);
+
+    console.log("Selected city:", cityName);
+    fetchWeatherData(cityName);
+  }, [cityName]);
 
   const handleLogout = () => {
     setUser(null);
@@ -43,35 +51,75 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleCityClick = (city) => {
-    setSelectedCity(city);
-    console.log(city);
+  const handleCityClick = async (cityName) => {
+    console.log("Clicked city:", cityName);
+    try {
+      await setCityName(cityName);
+      const weatherData = await fetchDataWeather(cityName);
+      setWeatherData(weatherData);
+      setSelectedCityWeather(weatherData);
+    } catch (error) {
+      console.error("Ошибка при выборе города:", error);
+    }
   };
 
+  const handleAddWeather = async (cityName, weatherData) => {
+    try {
+      await setCityName(cityName);
+      console.log("Selected city:", cityName);
+      console.log("Fetched weather data:", weatherData);
+      setWeatherData(weatherData);
+      setSelectedCityWeather(weatherData);
+    } catch (error) {
+      console.error("Ошибка при установке названия города:", error);
+    }
+  };
+
+  const handleSelectCity = (cityName) => {
+    setCityName(cityName);
+    console.log("Selected city:", cityName);
+  };
+  console.log("weatherData",weatherData);
   return (
-    <section
-      className="w-full h-screen py-16"
-      style={{
-        backgroundImage: `url(${require("./img/background.jpg")})`,
-        backgroundSize: "cover",
-      }}
-    >
+    <section className={`custom-transition flex flex-col items-center  w-full h-screen ${isDarkMode ? "dark" : "light"}`}>
       {user ? (
-        <div className="w-full py-16 flex flex-col items-center">
-          <h1 className="text-2xl font-bold mb-4">Привет, {user.email}</h1>{" "}
-          {/* Приветственное сообщение */}
-          <CitySearch />
-          <FavoriteCities onCityClick={handleCityClick} />
-          <div className="container mx-auto mt-8">
-            <WeatherCard cityName={selectedCity} />
-            <WeatherForecast cityName={selectedCity} />
+        <div className=" w-full py-16  flex flex-col items-center">
+          <div className="flex justify-between mb-4 w-full">
+            <h1 className=" container text-2xl font-bold mx-4">
+              Привет, {user.email}
+            </h1>
+            <div className="flex mx-4">
+            <button
+              className="theme bg-red-400 text-black rounded px-4 py-2 mb-2 mx-4"
+              onClick={handleLogout}
+            >
+              Выйти
+            </button>
+            <button
+              className="theme bg-blue-600 text-black rounded-3xl px-4 py-2 mb-2 mx-4"
+              onClick={toggleDarkMode}
+            >
+              <MoonIcon className="w-8 h-8" />
+             
+            </button>
+            </div>
           </div>
-          <button
-            className="bg-blue-500 text-white rounded px-4 py-2 mb-2 mx-auto"
-            onClick={handleLogout}
-          >
-            Выйти
-          </button>
+
+          <CitySearch handleAddWeather={handleAddWeather} />
+          <FavoriteCities
+            onCityClick={setCityName}
+
+            favoriteCity={favoriteCity}
+            setFavoriteCity={setFavoriteCity}
+            handleAddWeather={handleAddWeather}
+            handleSelectCity={handleSelectCity}
+          />
+
+          <div className="container mx-auto mt-8">
+          <WeatherCard  weatherData={weatherData} />
+
+            <WeatherForecast weatherData={weatherData} />
+          </div>
         </div>
       ) : (
         <Auth onAuthSuccess={setUser} />

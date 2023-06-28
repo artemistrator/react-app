@@ -4,30 +4,22 @@ const apiKeyWeatherApi = "a986871a77a744e6937134718230203";
 const apiUrlWeatherApi = `http://api.weatherapi.com/v1/forecast.json?key=${apiKeyWeatherApi}`;
 
 const useCityName = () => {
-  const [cityName, setCityName] = useState("Москва");
-
-  useEffect(() => {
-    const storedCityName = localStorage.getItem("selectedCity");
-    if (storedCityName) {
-      setCityName(storedCityName);
-    }
-  }, []);
+  const [cityName, setCityName] = useState(); // Изменили имя переменной
 
   const setNewCityName = (newCityName) => {
     setCityName(newCityName);
-    localStorage.setItem("selectedCity", newCityName);
   };
 
   return [cityName, setNewCityName];
 };
 
-const fetchDataWeather = async (cityName) => {
+const fetchDataWeather = async (city) => {
   try {
+    console.log("city", city);
     const resultDataWeather = await fetch(
-      `${apiUrlWeatherApi}&q=${cityName}&days=3&lang=ru`
+      `${apiUrlWeatherApi}&q=${city}&days=3&lang=ru`
     );
     const dataWeather = await resultDataWeather.json();
-    localStorage.setItem("weatherData", JSON.stringify(dataWeather));
     return dataWeather;
   } catch (error) {
     console.log("Произошла ошибка при получении данных о погоде:", error);

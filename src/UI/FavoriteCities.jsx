@@ -12,13 +12,20 @@ import { fetchDataWeather } from "../API/api";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "./FavoriteCities.css";
 import FadeListItem from "./FadeListItem";
+import WeatherCard from "./WeatherCard";
+import { useCityName } from "../API/api";
 
 const FavoriteCities = () => {
   const [favoriteCities, setFavoriteCities] = useState([]);
   const [user, setUser] = useState(null);
   const [weatherDataMap, setWeatherDataMap] = useState({});
+  const [favoriteCity, setFavoriteCity] = useState(null);
+  const [selectedCityWeather, setSelectedCityWeather] = useState(null);
+  //const [cityName, setCityName] = useCityName();
 
-  console.log("favoriteCities (before useEffect):", favoriteCities);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   const handleRemoveFromFavorites = async (city) => {
     try {
@@ -28,6 +35,17 @@ const FavoriteCities = () => {
       console.log(`Город "${city}" удален из избранного.`);
     } catch (error) {
       console.error("Ошибка при удалении города из избранного:", error);
+    }
+  };
+
+  const handleAddWeather = async (city, weatherData) => {
+    try {
+    //  await setCityName(city); // Установите название города
+      console.log("Selected city:", city);
+      console.log("Fetched weather data:", weatherData); // Добавленный console.log
+      setSelectedCityWeather(weatherData); // Обновляем selectedCityWeather
+    } catch (error) {
+      console.error("Ошибка при установке названия города:", error);
     }
   };
 
@@ -82,13 +100,13 @@ const FavoriteCities = () => {
     const fetchWeatherData = async () => {
       for (const city of favoriteCities) {
         try {
-          const dataWeather = await fetchDataWeather(city);
+          const updDataWeather = await fetchDataWeather(city);
           setWeatherDataMap((prevDataMap) => ({
             ...prevDataMap,
-            [city]: dataWeather,
+            [city]: updDataWeather,
           }));
           console.log(`Город "${city}" получил данные.`);
-          console.log(dataWeather);
+          console.log(updDataWeather);
         } catch (error) {
           console.error("Ошибка при получении данных:", error);
         }
@@ -98,14 +116,29 @@ const FavoriteCities = () => {
     fetchWeatherData();
   }, [favoriteCities]);
 
-  console.log("favoriteCities (after useEffect):", favoriteCities);
+  const handleListItemClick = (city, weatherData) => {
+    handleAddWeather(city, weatherData);
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const displayedCities = favoriteCities.slice(startIndex, endIndex);
 
   return (
     <div className="mx-auto w-[600px]">
       <h2 className="text-xl font-bold mb-4 my-4">Избранные города</h2>
+      
       <ul>
         <TransitionGroup>
-          {favoriteCities.map((city) => {
+          {displayedCities.map((city) => {
             const weatherData = weatherDataMap[city];
 
             return (
@@ -114,12 +147,32 @@ const FavoriteCities = () => {
                   city={city}
                   weatherData={weatherData}
                   handleRemoveFromFavorites={handleRemoveFromFavorites}
+                  handleListItemClick={handleListItemClick}
                 />
               </CSSTransition>
             );
           })}
         </TransitionGroup>
       </ul>
+
+      {favoriteCities.length > pageSize && (
+        <div className="flex justify-center mt-4">
+          <button
+            className="bg-blue-200 text-black px-4 py-2 mr-2"
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+          >
+            Назад
+          </button>
+          <button
+            className="bg-blue-200 text-black px-4 py-2"
+            onClick={handleNextPage}
+            disabled={currentPage === Math.ceil(favoriteCities.length / pageSize)}
+          >
+            Вперед
+          </button>
+        </div>
+      )}
     </div>
   );
 };

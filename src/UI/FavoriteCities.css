@@ -18,3 +18,24 @@
   transform: translateX(100%);
   transition: opacity 600ms, transform 600ms ease-in;
 }
+
+.custom-transition {
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+.light {
+  background: linear-gradient(
+    to bottom right,
+    #fff,
+    #f2f2f2,
+    #ffd8bf,
+    #f2f2f2,
+    #fff
+  );
+  color: #1a1919;
+}
+
+.dark {
+  background: linear-gradient(to bottom right, #231c29, #1c1425, #090113);
+  color: #ffffff;
+}

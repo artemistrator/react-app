@@ -1,29 +1,11 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import "moment/locale/ru"; // Import Russian locale for moment
-import { fetchDataWeather } from "../API/api";
 
-const WeatherForecast = ({ cityName }) => {
-  const [weatherData, setWeatherData] = useState(null);
 
-  useEffect(() => {
-    const fetchWeatherData = async (city) => {
-      try {
-        const data = await fetchDataWeather(city);
-        setWeatherData(data);
-      } catch (error) {
-        console.error("Ошибка при получении данных о погоде:", error);
-      }
-    };
+const WeatherForecast = ({ weatherData }) => {
 
-    fetchWeatherData(cityName);
-  }, [cityName]);
-
-  if (!weatherData) {
-    return null;
-  }
-
-  const { forecast } = weatherData;
+const { forecast } = weatherData;
 
   // Set locale to Russian
   moment.locale("ru");
