@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const apiKeyWeatherApi = "a986871a77a744e6937134718230203";
-const apiUrlWeatherApi = `http://api.weatherapi.com/v1/forecast.json?key=${apiKeyWeatherApi}`;
+const apiUrlWeatherApi = `https://api.weatherapi.com/v1/forecast.json?key=${apiKeyWeatherApi}`;
 
 const useCityName = () => {
   const [cityName, setCityName] = useState(); // Изменили имя переменной
@@ -30,7 +30,7 @@ const fetchDataWeather = async (city) => {
 const fetchCitySuggestions = async (value) => {
   try {
     const response = await fetch(
-      `http://api.weatherapi.com/v1/search.json?key=${apiKeyWeatherApi}&q=${value}&lang=ru`
+      `https://api.weatherapi.com/v1/search.json?key=${apiKeyWeatherApi}&q=${value}&lang=ru`
     );
     const data = await response.json();
     const suggestedCities = data.map((city) => city.name);
