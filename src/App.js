@@ -117,7 +117,6 @@ const App = () => {
 
           <div className="container mx-auto mt-8">
           <WeatherCard  weatherData={weatherData} />
-
             <WeatherForecast weatherData={weatherData} />
           </div>
         </div>
