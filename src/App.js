@@ -81,14 +81,14 @@ const App = () => {
   };
   console.log("weatherData",weatherData);
   return (
-    <section className={`custom-transition flex flex-col items-center  w-full h-screen ${isDarkMode ? "dark" : "light"}`}>
-      {user ? (
-        <div className=" w-full py-16  flex flex-col items-center">
-          <div className="flex justify-between mb-4 w-full">
-            <h1 className=" container text-2xl font-bold mx-4">
-              Привет, {user.email}
-            </h1>
-            <div className="flex mx-4">
+    <section className={`custom-transition flex flex-col items-center w-full h-screen ${isDarkMode ? "dark" : "light"}`}>
+    {user ? (
+      <div className="w-full py-16 flex flex-col items-center">
+        <div className="flex justify-between mb-4 w-full">
+          <h1 className="container text-2xl font-bold mx-4">
+            Привет, {user.email}
+          </h1>
+          <div className="flex mx-4">
             <button
               className="theme bg-red-400 text-black rounded px-4 py-2 mb-2 mx-4"
               onClick={handleLogout}
@@ -100,31 +100,35 @@ const App = () => {
               onClick={toggleDarkMode}
             >
               <MoonIcon className="w-8 h-8" />
-             
             </button>
-            </div>
-          </div>
-
-          <CitySearch handleAddWeather={handleAddWeather} />
-          <FavoriteCities
-            onCityClick={setCityName}
-
-            favoriteCity={favoriteCity}
-            setFavoriteCity={setFavoriteCity}
-            handleAddWeather={handleAddWeather}
-            handleSelectCity={handleSelectCity}
-          />
-
-          <div className="container mx-auto mt-8">
-          <WeatherCard  weatherData={weatherData} />
-            <WeatherForecast weatherData={weatherData} />
           </div>
         </div>
-      ) : (
-        <Auth onAuthSuccess={setUser} />
-      )}
-    </section>
-  );
+
+        <CitySearch handleAddWeather={handleAddWeather} />
+        <FavoriteCities
+          onCityClick={setCityName}
+          favoriteCity={favoriteCity}
+          setFavoriteCity={setFavoriteCity}
+          handleAddWeather={handleAddWeather}
+          handleSelectCity={handleSelectCity}
+        />
+
+        <div className={`container mx-auto mt-8 ${weatherData ? "" : "animate-pulse"}`}>
+          {weatherData ? (
+            <>
+              <WeatherCard weatherData={weatherData} />
+              <WeatherForecast weatherData={weatherData} />
+            </>
+          ) : (
+            <div className="h-32 bg-gray-300 rounded-lg"></div>
+          )}
+        </div>
+      </div>
+    ) : (
+      <Auth onAuthSuccess={setUser} />
+    )}
+  </section>
+);
 };
 
 export default App;
