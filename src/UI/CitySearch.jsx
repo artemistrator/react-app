@@ -79,13 +79,13 @@ const CitySearch = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4 ">Поиск города</h2>
+      <h2 className="text-xl font-bold mb-4">Поиск города</h2>
       <input
         type="text"
         value={searchValue}
         onChange={handleSearchChange}
         placeholder="Введите название города"
-        className="border border-gray-300 rounded px-4 py-2 mb-4 w-[600px] my-4"
+        className="border border-gray-300 rounded px-4 py-2 mb-4 w-full sm:w-[600px] my-4"
       />
       {citySuggestions.length > 0 && (
         <ul ref={suggestionsRef}>
@@ -108,5 +108,6 @@ const CitySearch = () => {
     </div>
   );
 };
+
 
 export default CitySearch;

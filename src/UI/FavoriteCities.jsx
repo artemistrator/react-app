@@ -133,7 +133,7 @@ const FavoriteCities = () => {
   const displayedCities = favoriteCities.slice(startIndex, endIndex);
 
   return (
-    <div className="mx-auto w-[600px]">
+    <div className="mx-auto w-full sm:w-[600px]">
       <h2 className="text-xl font-bold mb-4 my-4">Избранные города</h2>
       
       <ul>
@@ -176,5 +176,6 @@ const FavoriteCities = () => {
     </div>
   );
 };
+
 
 export default FavoriteCities;

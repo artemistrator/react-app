@@ -65,29 +65,30 @@ const Auth = ({ onAuthSuccess }) => {
         placeholder="Email"
         value={email}
         onChange={handleEmailChange}
-        className="border border-gray-300 rounded px-2 py-1 mb-2"
+        className="border border-gray-300 rounded px-2 py-1 mb-2 w-full sm:w-auto"
       />
       <input
         type="password"
         placeholder="Пароль"
         value={password}
         onChange={handlePasswordChange}
-        className="border border-gray-300 rounded px-2 py-1 mb-2"
+        className="border border-gray-300 rounded px-2 py-1 mb-2 w-full sm:w-auto"
       />
       <button
         onClick={handleLogin}
-        className="bg-blue-500 text-white rounded px-4 py-2 mb-2 mx-auto"
+        className="bg-blue-500 text-white rounded px-4 py-2 mb-2 mx-auto w-full sm:w-auto"
       >
         Войти
       </button>
       <button
         onClick={handleSignup}
-        className="bg-green-500 text-white rounded px-4 py-2"
+        className="bg-green-500 text-white rounded px-4 py-2 w-full sm:w-auto"
       >
         Зарегистрироваться
       </button>
     </div>
   );
 };
+
 
 export default Auth;

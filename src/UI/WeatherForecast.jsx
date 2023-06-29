@@ -15,7 +15,7 @@ const { forecast } = weatherData;
       <h2 className="text-xl font-semibold mb-4 flex justify-center">
         Прогноз погоды на 3 дня
       </h2>
-      <div className="grid gap-4 md:grid-cols-3 w-1/3 mx-auto ">
+      <div className="grid gap-4 md:grid-cols-3 w-full md:w-1/3 mx-auto">
         {forecast?.forecastday?.map((day) => (
           <div
             key={day.date}
@@ -38,5 +38,6 @@ const { forecast } = weatherData;
     </div>
   );
 };
+
 
 export default WeatherForecast;

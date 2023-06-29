@@ -8,15 +8,15 @@ const WeatherCard = ({ weatherData }) => {
   return (
     <div className="p-4 mx-auto max-w-xs">
       {weatherData && (
-        <div className="flex items-center mb-4">
-          <div className="w-1/2">
+        <div className="flex flex-col items-center md:flex-row md:items-center mb-4">
+          <div className="w-full md:w-1/2">
             <img
               className="h-auto"
               src={weatherData.current.condition.icon}
               alt="weather icon"
             />
           </div>
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <p className="mb-2">
               <span className="font-semibold text-2xl">
                 {weatherData.location.name}
@@ -38,5 +38,6 @@ const WeatherCard = ({ weatherData }) => {
     </div>
   );
 };
+
 
 export default WeatherCard;
